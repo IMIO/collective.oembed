@@ -89,6 +89,7 @@ REGEX_PROVIDERS = [
             'regex:.*youtube\.com/playlist.*'
         ],
         u'endpoint':'http://www.youtube.com/oembed',
+        u'timeout': 2,
     },
     {
         u'hostname': ('www.flickr.com',),
@@ -114,6 +115,7 @@ REGEX_PROVIDERS = [
         u'hostname': ('vimeo.com',),
         u'regex': ['http://vimeo.com/*', 'https://vimeo.com/*'],
         u'endpoint':'http://vimeo.com/api/oembed.{format}',
+        u'timeout': 2,
     },
     {
         u'hostname': ('www.collegehumor.com',),
@@ -168,6 +170,7 @@ REGEX_PROVIDERS = [
         #http://www.dailymotion.com/doc/api/oembed.html
         u'regex': ['http://www.dailymotion.com/video/*'],
         u'endpoint':'http://www.dailymotion.com/services/oembed',
+        u'timeout': 2,
     },
     {
         u'hostname': ('clikthrough.com', 'www.clikthrough.com'),
@@ -289,7 +292,7 @@ def wordpress_factory(info):
 
 
 def endpoint_factory(info):
-    return oembed.OEmbedEndpoint(info[u'endpoint'], info[u'regex'])
+    return oembed.OEmbedEndpoint(info[u'endpoint'], info[u'regex'], timeout=info['timeout'])
 
 
 def get_structure():
@@ -298,6 +301,7 @@ def get_structure():
     for provider in REGEX_PROVIDERS:
         provider['factory'] = endpoint_factory
         provider['consumer'] = Consumer
+        provider['timeout'] = provider.get('timeout', oembed.NO_TIMEOUT)
         for hostname in provider['hostname']:
             endpoints[hostname] = [provider]
 
