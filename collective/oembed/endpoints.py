@@ -64,6 +64,9 @@ class Consumer(object):
         except urllib2.URLError, e:
             #support offline mode
             logger.info('offline mode')
+        except:
+            #support timeout mode
+            logger.info('Timeout')
 
     def initialize_consumer(self):
         if self.consumer is None:
